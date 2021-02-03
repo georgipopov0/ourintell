@@ -1,5 +1,6 @@
 from flask import request, Blueprint, jsonify, render_template, url_for
 
+from  flask import current_app
 from ourintell.models import RecordedEvents
 from ourintell import db
 from sqlalchemy import exc
@@ -12,10 +13,11 @@ intell = Blueprint('intell',__name__)
 @intell.route("/")
 @intell.route("/home")
 def home():
-    # page = request.args.get("page",1,type=int)
-    # eventsRaw = RecordedEvents.query.paginate(page=page, per_page=5)
-    # events = jsonify([i.eventData for i in eventsRaw.items])
-   return render_template('home.html', title='home')
+    page = request.args.get("page",1,type=int)
+    eventsRaw = RecordedEvents.query.paginate(page=page, per_page=5)
+    events = [json.loads(i.eventData) for i in eventsRaw.items]
+    print(events[0])
+    return render_template('home.html', events = events)
 
 @intell.route("/test", methods = ["POST"])
 def test():

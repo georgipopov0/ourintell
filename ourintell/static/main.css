@@ -32,9 +32,9 @@ body {
     margin-bottom: 20px;
   }
   
- .article-title {
+  .event-ip {
     color: #444444;
-  } 
+  }
   
   a.article-title:hover {
     color: #428bca;
@@ -55,26 +55,26 @@ body {
     padding-bottom: 1px;
     margin-bottom: 4px;
     border-bottom: 1px solid #e3e3e3
-  } */
+  }
   
-  /* .article-metadata a:hover {
+  .article-metadata a:hover {
     color: #333;
     text-decoration: none;
-  } */
+  }
   
-  /* .article-svg {
+  .article-svg {
     width: 25px;
     height: 25px;
     vertical-align: middle;
-  } */
+  }
   
-  /* .account-img {
+  .account-img {
     height: 125px;
     width: 125px;
     margin-right: 20px;
     margin-bottom: 16px;
-  } */
+  }
   
-  /* .account-heading {
+  .account-heading {
     font-size: 2.5rem;
-  } */
+  }
