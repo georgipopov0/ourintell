@@ -47,5 +47,16 @@ def getEvent(eventId):
     event = json.loads(event.eventData)
     return render_template("event.html",event = event)
 
+@intell.route("/events/filtered", methods = ["GET"])
+def getFilteredEvents():
+    tags =  request.args
+    eventsString = RecordedEvents.query.all()
+    eventsFiltered = [i.asDict() for i in eventsString]
+    for tag in tags:
+        eventsFiltered = [event for event in eventsFiltered if event['eventData'][tag] == tags[tag]]
 
+    return render_template('events.html', events = eventsFiltered)
 
+@intell.route("/test", methods = ["GET"])
+def test():
+    return request.args

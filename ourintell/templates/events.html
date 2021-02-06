@@ -5,8 +5,10 @@
           <div class="media-body">
             {% if event['eventData']["source.ip"] %}
             <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['eventId']) }}">{{ event['eventData']['source.ip'] }}</a></h2>
-            {% else %}
-            <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['eventId']) }}">{{ (event['eventData'])['source.network'] }}</a></h2>
+            {% elif event['eventData']["source.network"] %}
+            <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['eventId']) }}">{{ event['eventData']['source.network'] }}</a></h2>
+            {%else%}
+            <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['eventId']) }}"> {{ event['eventData']['source.fqdn'] }} </a></h2>
             {% endif %}
             <p class="article-content">{{ event['eventData']["feed.provider"] }}</p>
           </div>
