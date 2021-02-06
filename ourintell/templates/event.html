@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% if event["source.ip"] %}
+    <h2><a class="event-ip" href="#">{{ event["source.ip"] }}</a></h2>
+    {% else %}
+    <h2><a class="event-ip" href="#">{{ event["source.network"] }}</a></h2>
+    {% endif %}
+    {% for field in event %}
+        <article class="container">
+          <div class="media-body">
+            <p>{{field}}: {{event[field]}}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

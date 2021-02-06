@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from ourintell import db
 from flask import current_app
+import json
 
 class RecordedEvents(db.Model):
     __tablename__ = 'RecordedEvents'
@@ -13,3 +14,6 @@ class RecordedEvents(db.Model):
 
     def getEvent(self):
         return self.eventData
+
+    def asDict(self):
+        return{'eventId':self.eventId, 'eventData':json.loads( self.eventData)}

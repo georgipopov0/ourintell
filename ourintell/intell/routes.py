@@ -11,16 +11,16 @@ from hashlib import sha256
 intell = Blueprint('intell',__name__)
 
 @intell.route("/")
-@intell.route("/home")
-def home():
-    page = request.args.get("page",1,type=int)
-    eventsRaw = RecordedEvents.query.paginate(page=page, per_page=5)
-    events = [json.loads(i.eventData) for i in eventsRaw.items]
-    print(events[0])
-    return render_template('home.html', events = events)
+@intell.route("/events", methods = ["GET"])
+def getEvents():
+    page = request.args.get("page", 1, type=int)
+    eventsRaw= RecordedEvents.query.paginate(page=page, per_page=5)
+    events = [i.asDict() for i in eventsRaw.items]
 
-@intell.route("/test", methods = ["POST"])
-def test():
+    return render_template('events.html', events = events)
+
+@intell.route("/events", methods = ["POST"])
+def addEvent():
 
     event = json.dumps(request.get_json())
     hashedEvent = sha256(event.encode('utf-8')).hexdigest()
@@ -39,7 +39,13 @@ def test():
 
     return hashedEvent, 201
 
-@intell.route("/spas")
-def spas():
-    return "Spaasssssss"
+@intell.route('/event/<eventId>', methods = ["GET"])
+def getEvent(eventId):
+
+    print(eventId)
+    event = RecordedEvents.query.filter_by(eventId = eventId).first()
+    event = json.loads(event.eventData)
+    return render_template("event.html",event = event)
+
+
 
