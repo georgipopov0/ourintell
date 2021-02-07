@@ -42,20 +42,22 @@ def addEvent():
 @intell.route('/event/<eventId>', methods = ["GET"])
 def getEvent(eventId):
 
-    print(eventId)
     event = RecordedEvents.query.filter_by(eventId = eventId).first()
     event = json.loads(event.eventData)
     return render_template("event.html",event = event)
 
 @intell.route("/events/filtered", methods = ["GET"])
 def getFilteredEvents():
+    pageSize = 10
     tags =  request.args
+    page = tags.get('page', 1, int)
     eventsString = RecordedEvents.query.all()
     eventsFiltered = [i.asDict() for i in eventsString]
     for tag in tags:
+        if(tag == "page"):
+            continue
         eventsFiltered = [event for event in eventsFiltered if event['eventData'][tag] == tags[tag]]
-
-    return render_template('events.html', events = eventsFiltered)
+    return render_template('events.html', events = eventsFiltered[pageSize*page: pageSize*page+pageSize])
 
 @intell.route("/test", methods = ["GET"])
 def test():
