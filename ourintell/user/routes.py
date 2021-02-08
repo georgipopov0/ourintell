@@ -1,7 +1,7 @@
-from flask import request, Blueprint, jsonify, render_template, url_for
+from flask import request, Blueprint, jsonify, render_template, url_for, flash, redirect
 
 from ourintell import db
-from ourintell.user.forms import LoginForm
+from ourintell.user.forms import LoginForm, RegistrationForm
 
 from sqlalchemy import exc
 
@@ -10,7 +10,21 @@ from hashlib import sha256
 
 user = Blueprint('user',__name__)
 
-@user.route("/login")
+@user.route("/login", methods = ["GET", "POST"])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+            if form.email.data == 'admin@gmail.com' and form.password.data == 'password':
+                flash('You have been logged in!', 'success')
+                return redirect(url_for("intell.getEvents"))
+            else:
+              flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template("login.html", form = form)
+
+@user.route("/register", methods = ["GET", "POST"])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('intell.getEvents'))
+    return render_template("register.html", form = form)
