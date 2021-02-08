@@ -34,6 +34,9 @@ def create_app(test_config=None,config_class=Config):
     # a simple page that says hello
 
     from ourintell.intell.routes import intell
+    from ourintell.user.routes import user
+
     app.register_blueprint(intell)
+    app.register_blueprint(user)
 
     return app
