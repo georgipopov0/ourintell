@@ -30,9 +30,14 @@
               <a class="nav-item nav-link" href="/about">About</a>
             </div>
             <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-              <a class="nav-item nav-link" href="{{ url_for('user.login') }}">Login</a>
-              <a class="nav-item nav-link" href="/register">Register</a>
+            <div class="navbar-nav align-items-center">
+              {% if current_user.is_authenticated %}
+              <a class="nav-item nav-link " href="{{ url_for('user.logout') }}">Logout</a>
+              <h3 class = "nav-item navbar-text ml-2"> {{current_user.username}}</h3>
+              {% else %}
+                <a class="nav-item nav-link" href="{{ url_for('user.login') }}">Login</a>
+                <a class="nav-item nav-link" href="{{ url_for('user.register') }}">Register</a>
+              {% endif%}
             </div>
           </div>
         </div>

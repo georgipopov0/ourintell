@@ -2,7 +2,7 @@ create database threat_data;
 use threat_data;
 
 create table RecordedEvents(
-	eventId varchar(256) primary key not null unique,
+	Id varchar(256) primary key not null unique,
     eventdata varchar(2047)
 );
 
@@ -16,7 +16,7 @@ create table TrackableResources(
 );
 
 create table Users(
-	userId int primary key not null auto_increment,
+	Id int primary key not null auto_increment,
 	userName varchar(32) not null unique,
     password char(60) not null,
     email varchar(120)
@@ -24,7 +24,7 @@ create table Users(
 
 
 create table Subscriptions(
-	subscriptionId int not null auto_increment unique primary key,
+    Id int not null auto_increment unique primary key,
     trackedResource varchar(128) not null,
     ticketingMethod varchar(16) not null,
     ticketedAddress varchar(128) not null,
@@ -35,21 +35,22 @@ create table Subscriptions(
 
 
 create table UserSubscriptions(
-	userId int,
-    subscriptionId int,
+	userId int not null,
+    subscriptionId int not null,
     
     foreign key(userId) references Users(userId),
 	foreign key(subscriptionId) references Subscriptions(subscriptionId)
 );
 
 create table sentTickets(
-    eventId varchar(256),  
-	subscriptionId int,
+    eventId varchar(256) not null,
+	subscriptionId int not null,
     
 	foreign key(eventId) references RecordedEvents(eventId),
     foreign key(subscriptionId) references Subscriptions(subscriptionId)
 );
 
+drop table sntTickets;
 drop table userSubscriptions;
 drop table Subscriptions;
 drop table Users;
