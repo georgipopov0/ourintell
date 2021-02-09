@@ -1,7 +1,8 @@
-from flask import request, Blueprint, jsonify, render_template, url_for, flash, redirect
+from flask import request, Blueprint, jsonify, render_template, url_for, flash
 
 from ourintell import db
 from ourintell.user.forms import LoginForm, RegistrationForm
+from ourintell.models import User
 
 from sqlalchemy import exc
 
@@ -28,3 +29,10 @@ def register():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('intell.getEvents'))
     return render_template("register.html", form = form)
+
+@user.route("/addSpas")
+def addSpas():
+    spas = User(username='Spas', email='spas@spas.spas', password='spas')
+    db.session.add(spas)
+    db.session.commit()
+    return "Spass"
