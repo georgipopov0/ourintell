@@ -16,7 +16,9 @@ user = Blueprint('user',__name__)
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-            if form.email.data == 'admin@gmail.com' and form.password.data == 'password':
+            user = User.query.filter_by(email=form.email.data).first()
+            print(user)
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
                 flash('You have been logged in!', 'success')
                 return redirect(url_for("intell.getEvents"))
             else:

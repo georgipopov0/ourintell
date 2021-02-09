@@ -8,10 +8,6 @@ class RecordedEvent(db.Model):
     eventId = Column(String(256), primary_key=True)
     eventData = Column(String(2047), nullable=False)
 
-    def __init__(self, eventId=None, eventData=None):
-        self.eventId = eventId
-        self.eventData = eventData
-
     def getEvent(self):
         return self.eventData
 
@@ -27,3 +23,16 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
+
+class TicketingMethods(db.Model):
+    ticketingMethod = Column(String(16), primary_key=True,)
+    methodDescription = Column(String(32))
+
+class TrackableResources(db.Model):
+    resourceName = Column(String(16), primary_key=True, unique=True)
+
+class Subscriptions(db.Model):
+    subscriptionId = Column(Integer, primary_key=True, nullable=False)
+    trackedResource = Column(String(128), nullable=False)
+    trackingMethod = Column(String(16), nullable=False)
+    trackedAddress = Column(String(128), nullable=False)
