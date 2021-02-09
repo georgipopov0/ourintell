@@ -6,33 +6,37 @@ create table RecordedEvents(
     eventdata varchar(2047)
 );
 
+drop table TicketingMethods;
 create table TicketingMethods(
-	ticketingMethod varchar(256) not null primary key unique,
-    methodDescription varchar(512)  
+	ticketingMethod varchar(16) not null primary key unique,
+    methodDescription varchar(32)  
 );
+drop table TrackableResources;
 
+drop table Users;
 create table TrackableResources(
-	resurceName varchar(128) not null primary key unique
+	resurceName varchar(16) not null primary key unique
 );
 
 create table Users(
 	userId int primary key not null auto_increment,
-	userName varchar(512) not null unique,
-    password varchar(1024) not null,
-    email varchar(254)
+	userName varchar(32) not null unique,
+    password char(60) not null,
+    email varchar(120)
 );
 
 drop table Subscriptions;
 create table Subscriptions(
 	subscriptionId int not null auto_increment unique primary key,
     trackedResource varchar(128),
-    ticketingMethod varchar(256),
-    ticketignAdress varchar(256),
+    ticketingMethod varchar(16),
+    ticketignAdress varchar(128),
     
     foreign key(trackedResource) references TrackableResources(resurceName),
     foreign key(ticketingMethod) references TicketingMethods(ticketingMethod)
 );
 
+drop table userSubscriptions;
 create table UserSubscriptions(
 	userId int,
     subscriptionId int,
@@ -41,6 +45,7 @@ create table UserSubscriptions(
 	foreign key(subscriptionId) references Subscriptions(subscriptionId)
 );
 
+drop table reportedEvents;
 create table reportedEvents(
     eventId varchar(256),  
 	subscriptionId int,
