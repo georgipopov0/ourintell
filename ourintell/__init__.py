@@ -2,9 +2,12 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+
 from ourintell.config import Config
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 def create_app(test_config=None,config_class=Config):
     # create and configure the app
@@ -26,6 +29,7 @@ def create_app(test_config=None,config_class=Config):
 
     # initialise the database
     db.init_app(app)
+    bcrypt.init_app(app)
 
     # @app.teardown_appcontext
     # def shutdown_session(exception=None):
