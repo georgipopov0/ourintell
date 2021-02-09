@@ -49,8 +49,8 @@ def getEvent(eventId):
 @intell.route("/events/filtered", methods = ["GET"])
 def getFilteredEvents():
     pageSize = 11
-    tags =  request.args
-    page = tags.get('page', 1, int) - 1
+    tags =  request.args.copy()
+    page = int(tags.pop('page', 1)) - 1
     eventsString = RecordedEvent.query.all()
     events = [i.asDict() for i in eventsString]
     filteredEvents = []
@@ -66,7 +66,7 @@ def getFilteredEvents():
                 break
         if(skipEvent):
             filteredEvents.append(event)
-    return render_template('events.html', events = filteredEvents[pageSize*page: pageSize*page+pageSize])
+    return render_template('events.html', events = filteredEvents[pageSize*page: pageSize*page+pageSize], tags = tags)
 
 @intell.route("/test", methods = ["GET"])
 def test():

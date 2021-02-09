@@ -3,11 +3,14 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 from ourintell.config import Config
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+login_manager = LoginManager()
+
 
 def create_app(test_config=None,config_class=Config):
     # create and configure the app
@@ -30,6 +33,7 @@ def create_app(test_config=None,config_class=Config):
     # initialise the database
     db.init_app(app)
     bcrypt.init_app(app)
+    login_manager.init_app(app)
 
     # @app.teardown_appcontext
     # def shutdown_session(exception=None):

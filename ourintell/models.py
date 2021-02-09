@@ -1,7 +1,23 @@
 from sqlalchemy import Column, Integer, String
-from ourintell import db
-from flask import current_app
+from flask_login import UserMixin
+
+from ourintell import db, login_manager
 import json
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
+    __tablename__ = "Users"
+    id = Column(Integer, primary_key = True)
+    username = Column(String(32), nullable=False, unique=True)
+    email = Column(String(120), nullable=False, unique=True)
+    password = Column(String(60), nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
+
 
 class RecordedEvent(db.Model):
     __tablename__ = 'RecordedEvents'
@@ -14,25 +30,23 @@ class RecordedEvent(db.Model):
     def asDict(self):
         return{'eventId':self.eventId, 'eventData':json.loads( self.eventData)}
 
-class User(db.Model):
-    __tablename__ = "Users"
-    userId = Column(Integer, primary_key = True)
-    username = Column(String(32), nullable=False, unique=True)
-    email = Column(String(120), nullable=False, unique=True)
-    password = Column(String(60), nullable=False)
+# class TicketingMethods(db.Model):
+#     ticketingMethod = Column(String(16), primary_key=True,)
+#     methodDescription = Column(String(32))
 
-    def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+# class TrackableResources(db.Model):
+#     resourceName = Column(String(16), primary_key=True, unique=True)
 
-class TicketingMethods(db.Model):
-    ticketingMethod = Column(String(16), primary_key=True,)
-    methodDescription = Column(String(32))
+# class Subscriptions(db.Model):
+#     subscriptionId = Column(Integer, primary_key=True, nullable=False)
+#     trackedResource = Column(String(128), nullable=False)
+#     trackingMethod = Column(String(16), nullable=False)
+#     trackedAddress = Column(String(128), nullable=False)
 
-class TrackableResources(db.Model):
-    resourceName = Column(String(16), primary_key=True, unique=True)
+# class UserSubscriptions(db.Model):
+#     userId = Column(Integer, nullable=False)
+#     subscriptionId = Column(Integer, nullable=False)
 
-class Subscriptions(db.Model):
-    subscriptionId = Column(Integer, primary_key=True, nullable=False)
-    trackedResource = Column(String(128), nullable=False)
-    trackingMethod = Column(String(16), nullable=False)
-    trackedAddress = Column(String(128), nullable=False)
+# class sentEvents(db.model):
+#     eventId = Column(String(256), nullable=False)
+#     subscriptionId = Column(Integer, nullable=False)
