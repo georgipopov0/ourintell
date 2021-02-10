@@ -1,4 +1,3 @@
-from sqlalchemy import Column, Integer, String, Boolean
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from flask_login import UserMixin
@@ -12,12 +11,14 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
-    __tablename__ = "Users"
-    id = Column(Integer, primary_key = True)
-    username = Column(String(32), nullable=False, unique=True)
-    email = Column(String(120), nullable=False, unique=True)
-    password = Column(String(60), nullable=False)
-    is_verified = Column(Boolean, nullable = False)
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
+    username = db.Column(db.String(32), nullable=False, unique=True)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String(60), nullable=False)
+    is_verified = db.Column(db.Boolean, nullable = False)
+    subscriptions = db.relationship('Subscription', backref = 'user', lazy=True)
+
 
 
     def __repr__(self):
@@ -38,9 +39,9 @@ class User(db.Model, UserMixin):
 
 
 class RecordedEvent(db.Model):
-    __tablename__ = 'RecordedEvents'
-    eventId = Column(String(256), primary_key=True)
-    eventData = Column(String(2047), nullable=False)
+    __tablename__ = 'recordedevents'
+    eventId = db.Column(db.String(256), primary_key=True)
+    eventData = db.Column(db.String(2047), nullable=False)
 
     def getEvent(self):
         return self.eventData
@@ -48,23 +49,30 @@ class RecordedEvent(db.Model):
     def asDict(self):
         return{'eventId':self.eventId, 'eventData':json.loads( self.eventData)}
 
-# class TicketingMethods(db.Model):
-#     ticketingMethod = Column(String(16), primary_key=True,)
-#     methodDescription = Column(String(32))
+class TicketingMethod(db.Model):
+    __tablename__ = 'ticketingmethods'
+    ticketingMethod = db.Column(db.String(16), primary_key=True,)
+    methodDescription = db.Column(db.String(32))
+    # subscriptions = db.relationship('Subscription', backref = 'method', lazy=True)
+    
 
-# class TrackableResources(db.Model):
-#     resourceName = Column(String(16), primary_key=True, unique=True)
+class TrackableResource(db.Model):
+    __tablename__ = 'trackableresources'
+    resourceName = db.Column(db.String(16), primary_key=True, unique=True)
+    # subscriptions = db.relationship('Subscription', backref = 'resource', lazy=True)
 
-# class Subscriptions(db.Model):
-#     subscriptionId = Column(Integer, primary_key=True, nullable=False)
-#     trackedResource = Column(String(128), nullable=False)
-#     trackingMethod = Column(String(16), nullable=False)
-#     trackedAddress = Column(String(128), nullable=False)
+class Subscription(db.Model):
+    __tablename__ = 'subscriptions'
+    Id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    trackedResource = db.Column(db.String(16), db.ForeignKey('trackableresources.resourceName'), nullable=False)
+    ticketingMethod = db.Column(db.String(16), db.ForeignKey('ticketingmethods.ticketingMethod'), nullable=False)
+    ticketingAddress = db.Column(db.String(128), nullable=False)
 
 # class UserSubscriptions(db.Model):
-#     userId = Column(Integer, nullable=False)
-#     subscriptionId = Column(Integer, nullable=False)
+#     userId = db.Column(db.Integer, nullable=False)
+#     subscriptionId = db.Column(db.Integer, nullable=False)
 
 # class sentEvents(db.model):
-#     eventId = Column(String(256), nullable=False)
-#     subscriptionId = Column(Integer, nullable=False)
+#     eventId = db.Column(db.String(256), nullable=False)
+#     subscriptionId = db.Column(db.Integer, nullable=False)
