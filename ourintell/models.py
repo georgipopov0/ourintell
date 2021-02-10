@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from flask_login import UserMixin
@@ -17,6 +17,8 @@ class User(db.Model, UserMixin):
     username = Column(String(32), nullable=False, unique=True)
     email = Column(String(120), nullable=False, unique=True)
     password = Column(String(60), nullable=False)
+    is_verified = Column(Boolean, nullable = False)
+
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"

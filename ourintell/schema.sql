@@ -19,7 +19,8 @@ create table Users(
 	Id int primary key not null auto_increment,
 	userName varchar(32) not null unique,
     password char(60) not null,
-    email varchar(120)
+    email varchar(120),
+    is_verified boolean
 );
 
 
