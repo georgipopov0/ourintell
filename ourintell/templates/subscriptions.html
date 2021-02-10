@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for subscription in subscriptions %}
+<article class="media content-section">
+  <div class="media-body">
+    <h2>id: {{ subscription.Id }}</h2>
+    <h2>username: {{ subscription.user.username }}</h2>
+    <h2>Tracked: {{ subscription.trackedResource }}</h2>
+    <h2>Method: {{ subscription.ticketingMethod }}</h2>
+    <h2>Adress: {{ subscription.ticketingAddress }}</h2>
+
+</div>
+</article>
+{% endfor %}
+{% endblock content%}

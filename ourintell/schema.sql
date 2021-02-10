@@ -12,7 +12,7 @@ create table TicketingMethods(
 );
 
 create table TrackableResources(
-	resurceName varchar(16) not null primary key unique
+	resourceName varchar(16) not null primary key unique
 );
 
 create table Users(
@@ -24,23 +24,17 @@ create table Users(
 );
 
 
-create table Subscriptions(
+create table subscriptions(
     Id int not null auto_increment unique primary key,
-    trackedResource varchar(128) not null,
+    userId int not null,
+    trackedResource varchar(16) not null,
     ticketingMethod varchar(16) not null,
-    ticketedAddress varchar(128) not null,
+    ticketingAddress varchar(128) not null,
     
-    foreign key(trackedResource) references TrackableResources(resurceName),
-    foreign key(ticketingMethod) references TicketingMethods(ticketingMethod)
-);
-
-
-create table UserSubscriptions(
-	userId int not null,
-    subscriptionId int not null,
     
-    foreign key(userId) references Users(userId),
-	foreign key(subscriptionId) references Subscriptions(subscriptionId)
+    foreign key(trackedResource) references TrackableResources(resourceName),
+    foreign key(ticketingMethod) references TicketingMethods(ticketingMethod),
+    foreign key(userId) references Users(id)
 );
 
 create table sentTickets(
@@ -48,10 +42,14 @@ create table sentTickets(
 	subscriptionId int not null,
     
 	foreign key(eventId) references RecordedEvents(eventId),
-    foreign key(subscriptionId) references Subscriptions(subscriptionId)
+    foreign key(subscriptionId) references Subscriptions(Id)
 );
 
-drop table sntTickets;
+insert into ticketingmethods value('email',null);
+insert into trackableresources value('network');
+insert into subscriptions(userId, trackedResource, ticketingMethod, ticketingAddress) value(1, 'network', 'email', 'spas');
+
+drop table sentTickets;
 drop table userSubscriptions;
 drop table Subscriptions;
 drop table Users;

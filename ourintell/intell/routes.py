@@ -62,7 +62,3 @@ def getEvents():
         if(skipEvent):
             filteredEvents.append(event)
     return render_template('events.html', events = filteredEvents[pageSize*page: pageSize*page+pageSize], tags = tags, current_page = page)
-
-@intell.route("/test", methods = ["GET"])
-def test():
-    return request.args

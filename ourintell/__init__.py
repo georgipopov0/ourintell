@@ -46,11 +46,10 @@ def create_app(test_config=None,config_class=Config):
 
     from ourintell.intell.routes import intell
     from ourintell.user.routes import user
+    from ourintell.subscriptions.routes import subscriptions
 
     app.register_blueprint(intell)
     app.register_blueprint(user)
-
-    print(app.config['MAIL_USERNAME'])
-    print(app.config['MAIL_PASSWORD'])
+    app.register_blueprint(subscriptions)
 
     return app
