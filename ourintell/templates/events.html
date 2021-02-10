@@ -18,14 +18,14 @@
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item">
-          <a class="page-link" href="{{ url_for('intell.getFilteredEvents', page=current_page ,**tags)}}" tabindex="-1">&lt</a>
+          <a class="page-link" href="{{ url_for('intell.getEvents', page=current_page ,**tags)}}" tabindex="-1">&lt</a>
         </li>
 
         <li class="page-item"><a class="page-link" href="#">{{current_page + 1}}</a></li>
 
 
         <li class="page-item">
-          <a class="page-link" href="{{ url_for('intell.getFilteredEvents', page= current_page + 2,**tags)}}">&gt</a>
+          <a class="page-link" href="{{ url_for('intell.getEvents', page= current_page + 2,**tags)}}">&gt</a>
         </li>
       </ul>
     </nav>

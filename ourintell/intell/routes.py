@@ -10,15 +10,6 @@ from hashlib import sha256
 
 intell = Blueprint('intell',__name__)
 
-@intell.route("/")
-@intell.route("/events", methods = ["GET"])
-def getEvents():
-    page = request.args.get("page", 1, type=int)
-    eventsRaw= RecordedEvent.query.paginate(page=page, per_page=5)
-    events = [i.asDict() for i in eventsRaw.items]
-
-    return render_template('events.html', events = events)
-
 @intell.route("/events", methods = ["POST"])
 def addEvent():
 
@@ -46,8 +37,10 @@ def getEvent(eventId):
     event = json.loads(event.eventData)
     return render_template("event.html",event = event)
 
-@intell.route("/events/filtered", methods = ["GET"])
-def getFilteredEvents():
+
+@intell.route("/", methods = ["GET"])
+@intell.route("/events", methods = ["GET"])
+def getEvents():
     pageSize = 11
     tags =  request.args.copy()
     page = int(tags.pop('page', 1)) - 1
