@@ -4,12 +4,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_mail import Mail
 
 from ourintell.config import Config
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+mail = Mail()
 
 
 def create_app(test_config=None,config_class=Config):
@@ -34,6 +36,7 @@ def create_app(test_config=None,config_class=Config):
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
 
     # @app.teardown_appcontext
     # def shutdown_session(exception=None):
@@ -46,5 +49,8 @@ def create_app(test_config=None,config_class=Config):
 
     app.register_blueprint(intell)
     app.register_blueprint(user)
+
+    print(app.config['MAIL_USERNAME'])
+    print(app.config['MAIL_PASSWORD'])
 
     return app
