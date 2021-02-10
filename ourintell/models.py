@@ -1,5 +1,8 @@
 from sqlalchemy import Column, Integer, String
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
 from flask_login import UserMixin
+from flask import current_app
 
 from ourintell import db, login_manager
 import json
@@ -17,6 +20,19 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
+
+    def get_verification_token(self, expires_sec=1800):
+        serializer = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return serializer.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_token(token)::
+        serializer = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = serializer.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
 
 class RecordedEvent(db.Model):

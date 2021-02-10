@@ -2,7 +2,7 @@ from flask import request, Blueprint, jsonify, render_template, url_for, flash, 
 from flask_login import current_user, login_user, logout_user
 
 from ourintell import db,  bcrypt
-from ourintell.user.forms import LoginForm, RegistrationForm
+from ourintell.user.forms import LoginForm, RegistrationForm , RequestResetForm, ResetPasswordForm
 from ourintell.models import User
 
 
@@ -48,6 +48,34 @@ def logout():
     logout_user()
     return redirect(url_for('intell.getEvents'))
 
-@user.route("/isAuthenticated")
-def isAuthenticated():
-    return jsonify(current_user.is_authenticated)
+
+def send_reset_email(user):
+    pass
+
+@user.route("/reset_password", methods = ["GET", "POST"])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('intell.getEvents'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email = form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to change your password')
+        return redirect(url_for('user.login'))
+    return render_template('request_reset.html', title='Reset Password', form=form)
+
+@user.route("/reset_password/<token>", methods = ["GET", "POST"])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('intell.getEvents'))
+    form = RequestResetForm()
+
+    user = User.get_verification_token(token)
+    if( not user):
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+
+    form = ResetPasswordForm()
+
+    return render_template('reset_password.html', title='Reset Password', form=form)
+
