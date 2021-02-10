@@ -65,7 +65,8 @@ class Subscription(db.Model):
     __tablename__ = 'subscriptions'
     Id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    trackedResource = db.Column(db.String(16), db.ForeignKey('trackableresources.resourceName'), nullable=False)
+    trackedResource = db.Column(db.String, nullable=False)
+    trackedResourceType = db.Column(db.String(16), db.ForeignKey('trackableresources.resourceName'), nullable=False)
     ticketingMethod = db.Column(db.String(16), db.ForeignKey('ticketingmethods.ticketingMethod'), nullable=False)
     ticketingAddress = db.Column(db.String(128), nullable=False)
 

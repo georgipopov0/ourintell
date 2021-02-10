@@ -27,12 +27,13 @@ create table Users(
 create table subscriptions(
     Id int not null auto_increment unique primary key,
     userId int not null,
-    trackedResource varchar(16) not null,
+    trackedResource varchar(64) not null,
+    trackedResourceType varchar(16) not null,
     ticketingMethod varchar(16) not null,
     ticketingAddress varchar(128) not null,
     
     
-    foreign key(trackedResource) references TrackableResources(resourceName),
+    foreign key(trackedResourceType) references TrackableResources(resourceName),
     foreign key(ticketingMethod) references TicketingMethods(ticketingMethod),
     foreign key(userId) references Users(id)
 );
@@ -47,7 +48,9 @@ create table sentTickets(
 
 insert into ticketingmethods value('email',null);
 insert into trackableresources value('network');
-insert into subscriptions(userId, trackedResource, ticketingMethod, ticketingAddress) value(1, 'network', 'email', 'spas');
+insert into ticketingmethods value('discord',null);
+insert into trackableresources value('url');
+insert into subscriptions(userId, trackedResourceType, ticketingMethod, ticketingAddress, trackedResource) value(1, 'network', 'email', 'spas', '0.0.0.0/8');
 
 drop table sentTickets;
 drop table userSubscriptions;
