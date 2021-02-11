@@ -12,7 +12,7 @@ from hashlib import sha256
 intell = Blueprint('intell',__name__)
 
 @intell.route("/events", methods = ["POST"])
-def addEvent():
+def add_event():
 
     event = json.dumps(request.get_json())
     hashedEvent = sha256(event.encode('utf-8')).hexdigest()
@@ -33,7 +33,7 @@ def addEvent():
     return 'Success',201
 
 @intell.route('/event/<eventId>', methods = ["GET"])
-def getEvent(eventId):
+def get_event(eventId):
 
     event = RecordedEvent.query.filter_by(id = eventId).first()
     event = json.loads(event.event_data)
@@ -42,7 +42,7 @@ def getEvent(eventId):
 
 @intell.route("/", methods = ["GET"])
 @intell.route("/events", methods = ["GET"])
-def getEvents():
+def get_events():
     pageSize = 11
     tags =  request.args.copy()
     page = int(tags.pop('page', 1)) - 1

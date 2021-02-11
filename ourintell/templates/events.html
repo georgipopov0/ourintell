@@ -4,11 +4,11 @@
         <article class="media content-section">
           <div class="media-body">
             {% if event['event_data']["source.ip"] %}
-            <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['id']) }}">{{ event['event_data']['source.ip'] }}</a></h2>
+            <h2><a class="event-ip" href="{{ url_for('intell.get_event', eventId = event['id']) }}">{{ event['event_data']['source.ip'] }}</a></h2>
             {% elif event['event_data']["source.network"] %}
-            <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['id']) }}">{{ event['event_data']['source.network'] }}</a></h2>
+            <h2><a class="event-ip" href="{{ url_for('intell.get_event', eventId = event['id']) }}">{{ event['event_data']['source.network'] }}</a></h2>
             {%else%}
-            <h2><a class="event-ip" href="{{ url_for('intell.getEvent', eventId = event['id']) }}"> {{ event['event_data']['source.fqdn'] }} </a></h2>
+            <h2><a class="event-ip" href="{{ url_for('intell.get_event', eventId = event['id']) }}"> {{ event['event_data']['source.fqdn'] }} </a></h2>
             {% endif %}
             <p class="article-content">{{ event['event_data']["feed.provider"] }}</p>
           </div>
@@ -18,14 +18,14 @@
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item">
-          <a class="page-link" href="{{ url_for('intell.getEvents', page=current_page ,**tags)}}" tabindex="-1">&lt</a>
+          <a class="page-link" href="{{ url_for('intell.get_events', page=current_page ,**tags)}}" tabindex="-1">&lt</a>
         </li>
 
         <li class="page-item"><a class="page-link" href="#">{{current_page + 1}}</a></li>
 
 
         <li class="page-item">
-          <a class="page-link" href="{{ url_for('intell.getEvents', page= current_page + 2,**tags)}}">&gt</a>
+          <a class="page-link" href="{{ url_for('intell.get_events', page= current_page + 2,**tags)}}">&gt</a>
         </li>
       </ul>
     </nav>

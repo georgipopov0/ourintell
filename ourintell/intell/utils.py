@@ -14,7 +14,7 @@ def send_email(subscrition, event):
                   recipients=[subscrition.ticketing_address])
 
     message.body = f'''An event has been detected for your subscription:
-{url_for('intell.getEvent', eventId = event.id, _external=True)}
+{url_for('intell.get_event', eventId = event.id, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
     mail.send(message)

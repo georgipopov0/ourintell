@@ -43,7 +43,7 @@ class RecordedEvent(db.Model):
     id = db.Column(db.String(256), primary_key=True)
     event_data = db.Column(db.String(2047), nullable=False)
 
-    def getEvent(self):
+    def get_event(self):
         return self.event_data
 
     def asDict(self):

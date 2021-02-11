@@ -18,7 +18,7 @@ user = Blueprint('user',__name__)
 @user.route("/register", methods = ["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('intell.getEvents'))
+        return redirect(url_for('intell.get_events'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -36,16 +36,16 @@ def verify_account(token):
     user = User.verify_token(token)
     if(token == None):
         flash('That is an invalid or expired token', 'warning')
-        return redirect(url_for('intell.getEvents'))
+        return redirect(url_for('intell.get_events'))
     user.is_verified = True
     db.session.commit()
     flash('Your account has been verified', 'success')
-    return redirect(url_for('intell.getEvents'))
+    return redirect(url_for('intell.get_events'))
 
 @user.route("/login", methods = ["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('intell.getEvents'))
+        return redirect(url_for('intell.get_events'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -53,7 +53,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('intell.getEvents'))
+            return redirect(next_page) if next_page else redirect(url_for('intell.get_events'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template("login.html", form = form)
@@ -62,13 +62,13 @@ def login():
 @user.route("/logout", methods = ['GET'])
 def logout():
     logout_user()
-    return redirect(url_for('intell.getEvents'))
+    return redirect(url_for('intell.get_events'))
 
 
 @user.route("/reset_password", methods = ["GET", "POST"])
 def reset_password_request():
     if current_user.is_authenticated:
-        return redirect(url_for('intell.getEvents'))
+        return redirect(url_for('intell.get_events'))
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email = form.email.data).first()
@@ -80,7 +80,7 @@ def reset_password_request():
 @user.route("/reset_password/<token>", methods = ["GET", "POST"])
 def reset_password(token):
     if current_user.is_authenticated:
-        return redirect(url_for('intell.getEvents'))
+        return redirect(url_for('intell.get_events'))
     user = User.verify_token(token)
     if(not user):
         flash('That is an invalid or expired token', 'warning')
