@@ -3,11 +3,11 @@ from wtforms import StringField, SelectField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 class CreateSubscriptionForm(FlaskForm):
-    ticketingMethod = SelectField('TicketingMethod',
+    ticketing_method = SelectField('TicketingMethod',
                            validators=[DataRequired(), Length(min=2, max=20)])
-    ticketingAddress = StringField('Address',
+    ticketing_address = StringField('Address',
                            validators=[DataRequired(),])
-    trackedResourceType = SelectField('ResourceType',
+    tracked_resource_type = SelectField('ResourceType',
                         validators=[DataRequired(),])
-    trackedResource = StringField('TrackResource', validators=[DataRequired()])
+    tracked_resource = StringField('TrackResource', validators=[DataRequired()])
     submit = SubmitField('Submit')

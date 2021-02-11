@@ -11,10 +11,10 @@ def send_email(subscrition, event):
     user = subscrition.user
     message = Message('Ourintell Subscription update',
                   sender='georgipopov069@gmail.com',
-                  recipients=[subscrition.ticketingAddress])
+                  recipients=[subscrition.ticketing_address])
 
     message.body = f'''An event has been detected for your subscription:
-{url_for('intell.getEvent', eventId = event.eventId, _external=True)}
+{url_for('intell.getEvent', eventId = event.id, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
     mail.send(message)
@@ -29,7 +29,7 @@ ticketing_methods = {'email': send_email,
 def check_network(subscrition, event):
     event = event.asDict()
     try:
-        is_in_network = (IPAddress(event['eventData'].get('source.ip')) in IPNetwork(subscrition.trackedResource))
+        is_in_network = (IPAddress(event['event_data'].get('source.ip')) in IPNetwork(subscrition.tracked_resource))
     except AddrFormatError:
         return False 
     return is_in_network
@@ -45,6 +45,6 @@ type_handlers = {'network':check_network,
 def ticket_handler(event):
     subscritions = Subscription.query.all()
     for subscrition in subscritions:
-        send_ticket = type_handlers[subscrition.trackedResourceType](subscrition, event)
+        send_ticket = type_handlers[subscrition.tracked_resource_type](subscrition, event)
         if(send_ticket):
-            ticketing_methods[subscrition.ticketingMethod](subscrition, event)
+            ticketing_methods[subscrition.method](subscrition, event)

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, url_for, redirect, flash
 from flask_login import login_required, current_user
 
 from ourintell import db
-from ourintell.models import Subscription, TicketingMethod, TrackableResource
+from ourintell.models import Subscription, TicketingMethod, TrackableResourceType
 from ourintell.subscriptions.forms import CreateSubscriptionForm
 
 
@@ -20,17 +20,22 @@ def get_subscriptions():
 @login_required
 def create_subscription():
 
-    methods = [method.ticketingMethod  for method in TicketingMethod.query.all()]
-    types = [resource.resourceName for resource in TrackableResource.query.all()]
+    methods = [method.method  for method in TicketingMethod.query.all()]
+    types = [resource.resource_type for resource in TrackableResourceType.query.all()]
 
     form = CreateSubscriptionForm()
-    form.ticketingMethod.choices = methods
-    form.ticketingMethod.default = 'email'
-    form.trackedResourceType.choices = types
+    form.ticketing_method.choices = methods
+    form.ticketing_method.default = 'email'
+    form.tracked_resource_type.choices = types
 
     if form.validate_on_submit():
         user = current_user
-        subscription = Subscription(userId = current_user.id, trackedResource = form.trackedResource.data, trackedResourceType = form.trackedResourceType.data, ticketingMethod = form.ticketingMethod.data, ticketingAddress = form.ticketingAddress.data)
+        subscription = Subscription(userId = current_user.id,
+                                     tracked_resource = form.tracked_resource.data, 
+                                     tracked_resource_type = form.tracked_resource_type.data, 
+                                     ticketing_method = form.ticketing_method.data, 
+                                     ticketing_address = form.ticketing_address.data, 
+                                     is_verified = False)
         db.session.add(subscription)
         db.session.commit()
         flash('New subscription added','success' )

@@ -16,7 +16,7 @@ def addEvent():
 
     event = json.dumps(request.get_json())
     hashedEvent = sha256(event.encode('utf-8')).hexdigest()
-    newEventEntry = RecordedEvent(eventId=hashedEvent,eventData=event)
+    newEventEntry = RecordedEvent(id=hashedEvent,event_data=event)
     
     db.session.add(newEventEntry)
 
@@ -35,8 +35,8 @@ def addEvent():
 @intell.route('/event/<eventId>', methods = ["GET"])
 def getEvent(eventId):
 
-    event = RecordedEvent.query.filter_by(eventId = eventId).first()
-    event = json.loads(event.eventData)
+    event = RecordedEvent.query.filter_by(id = eventId).first()
+    event = json.loads(event.event_data)
     return render_template("event.html",event = event)
 
 
@@ -56,9 +56,9 @@ def getEvents():
         for tag in tags:
             if tag == 'page':
                 continue
-            if tags[tag] == "exists" and tag in event['eventData']:
+            if tags[tag] == "exists" and tag in event['event_data']:
                 continue
-            if event['eventData'].get(tag) != tags[tag]:
+            if event['event_data'].get(tag) != tags[tag]:
                 skipEvent = False
                 break
         if(skipEvent):

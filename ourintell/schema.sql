@@ -2,7 +2,7 @@ drop database threat_data;
 create database threat_data;
 use threat_data;
 
-create table recorded_vents(
+create table recorded_events(
 	Id varchar(256) primary key not null unique,
     event_data varchar(2047)
 );
@@ -11,11 +11,11 @@ create table ticketing_methods(
 	method varchar(16) not null primary key unique
 );
 
-create table tackable_resource_types(
+create table trackable_resource_types(
 	resource_type varchar(16) not null primary key unique
 );
 
-create table Users(
+create table users(
 	Id int primary key not null auto_increment,
 	username varchar(32) not null unique,
     password char(60) not null,
@@ -34,7 +34,7 @@ create table subscriptions(
     is_verified bool not null,
     
     
-    foreign key(tracked_resource_type) references tackable_resource_types(resource_type),
+    foreign key(tracked_resource_type) references trackable_resource_types(resource_type),
     foreign key(ticketing_method) references ticketing_methods(method),
     foreign key(userId) references Users(id)
 );
@@ -51,11 +51,12 @@ insert into ticketing_methods value('email');
 insert into tackable_resource_types value('network');
 insert into ticketing_methods value('discord');
 insert into tackable_resource_types value('url');
-insert into subscriptions(userId, tracked_resource_type, ticketing_method, ticketing_address, tracked_resource) value(1, 'network', 'email', 'spas', '0.0.0.0/8');
+insert into subscriptions(userId, tracked_resource_type, ticketing_method, ticketing_address, tracked_resource, is_verified) value(1, 'network', 'email', 'spas', '0.0.0.0/8', false);
 
--- drop table sentTickets;
--- drop table usersubscriptions;
--- drop table subscriptions;
--- drop table Users;
--- drop table ticketing_methods;
--- drop table tackable_resource_types;
+drop table recorded_vents;
+drop table sentTickets;
+drop table usersubscriptions;
+drop table subscriptions;
+drop table users;
+drop table ticketing_methods;
+drop table tackable_resource_types;

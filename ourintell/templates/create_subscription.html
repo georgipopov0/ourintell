@@ -5,58 +5,58 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Create subscription</legend>
             <div class="form-group">
-                {{ form.ticketingMethod.label(class="form-control-label") }}
-                {% if form.ticketingMethod.errors %}
-                    {{ form.ticketingMethod(class="form-control form-control-lg is-invalid") }}
+                {{ form.ticketing_method.label(class="form-control-label") }}
+                {% if form.ticketing_method.errors %}
+                    {{ form.ticketing_method(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.ticketingMethod.errors %}
+                        {% for error in form.ticketing_method.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.ticketingMethod(class="form-control form-control-lg") }}
+                    {{ form.ticketing_method(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             
             <div class="form-group">
-                {{ form.ticketingAddress.label(class="form-control-label") }}
-                {% if form.ticketingAddress.errors %}
-                    {{ form.ticketingAddress(class="form-control form-control-lg is-invalid") }}
+                {{ form.ticketing_address.label(class="form-control-label") }}
+                {% if form.ticketing_address.errors %}
+                    {{ form.ticketing_address(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.ticketingAddress.errors %}
+                        {% for error in form.ticketing_address.errors %}
                             <span>{{    error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.ticketingAddress(class="form-control form-control-lg") }}
+                    {{ form.ticketing_address(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
 
             <div class="form-group">
-                {{ form.trackedResource.label(class="form-control-label") }}
-                {% if form.trackedResource.errors %}
-                    {{ form.trackedResource(class="form-control form-control-lg is-invalid") }}
+                {{ form.tracked_resource.label(class="form-control-label") }}
+                {% if form.tracked_resource.errors %}
+                    {{ form.tracked_resource(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.trackedResource.errors %}
+                        {% for error in form.tracked_resource.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.trackedResource(class="form-control form-control-lg") }}
+                    {{ form.tracked_resource(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
 
             <div class="form-group">
-                {{ form.trackedResourceType.label(class="form-control-label") }}
-                {% if form.trackedResourceType.errors %}
-                    {{ form.trackedResourceType(class="form-control form-control-lg is-invalid") }}
+                {{ form.tracked_resource_type.label(class="form-control-label") }}
+                {% if form.tracked_resource_type.errors %}
+                    {{ form.tracked_resource_type(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.trackedResourceType.errors %}
+                        {% for error in form.tracked_resource_type.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.trackedResourceType(class="form-control form-control-lg") }}
+                    {{ form.tracked_resource_type(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
         </fieldset>

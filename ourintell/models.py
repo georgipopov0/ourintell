@@ -39,36 +39,36 @@ class User(db.Model, UserMixin):
 
 
 class RecordedEvent(db.Model):
-    __tablename__ = 'recordedevents'
-    eventId = db.Column(db.String(256), primary_key=True)
-    eventData = db.Column(db.String(2047), nullable=False)
+    __tablename__ = 'recorded_events'
+    id = db.Column(db.String(256), primary_key=True)
+    event_data = db.Column(db.String(2047), nullable=False)
 
     def getEvent(self):
-        return self.eventData
+        return self.event_data
 
     def asDict(self):
-        return{'eventId':self.eventId, 'eventData':json.loads( self.eventData)}
+        return{'id':self.id, 'event_data':json.loads( self.event_data)}
 
 class TicketingMethod(db.Model):
-    __tablename__ = 'ticketingmethods'
-    ticketingMethod = db.Column(db.String(16), primary_key=True,)
-    methodDescription = db.Column(db.String(32))
+    __tablename__ = 'ticketing_methods'
+    method = db.Column(db.String(16), primary_key=True,)
     # subscriptions = db.relationship('Subscription', backref = 'method', lazy=True)
     
 
-class TrackableResource(db.Model):
-    __tablename__ = 'trackableresources'
-    resourceName = db.Column(db.String(16), primary_key=True, unique=True)
+class TrackableResourceType(db.Model):
+    __tablename__ = 'trackable_resource_types'
+    resource_type = db.Column(db.String(16), primary_key=True, unique=True)
     # subscriptions = db.relationship('Subscription', backref = 'resource', lazy=True)
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
     Id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    trackedResource = db.Column(db.String, nullable=False)
-    trackedResourceType = db.Column(db.String(16), db.ForeignKey('trackableresources.resourceName'), nullable=False)
-    ticketingMethod = db.Column(db.String(16), db.ForeignKey('ticketingmethods.ticketingMethod'), nullable=False)
-    ticketingAddress = db.Column(db.String(128), nullable=False)
+    is_verified = db.Column(db.Boolean, nullable=False)
+    tracked_resource = db.Column(db.String, nullable=False)
+    tracked_resource_type = db.Column(db.String(16), db.ForeignKey('trackable_resource_types.resource_type'), nullable=False)
+    ticketing_method = db.Column(db.String(16), db.ForeignKey('ticketing_methods.method'), nullable=False)
+    ticketing_address = db.Column(db.String(128), nullable=False)
 
 # class UserSubscriptions(db.Model):
 #     userId = db.Column(db.Integer, nullable=False)
