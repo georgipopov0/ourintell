@@ -10,7 +10,13 @@
 </article>
 
 {% for subscription in subscriptions %}
+
 <article class="row content-section">
+  {% if not subscription.is_verified %}
+    <div class="alert alert-danger">
+        Not is_verified.
+    </div>
+  {% endif %}
   <div class = 'col'>
     <h3><em class="text-muted h3 small">Type:</em> {{ subscription.tracked_resource_type }}</h3>
 
