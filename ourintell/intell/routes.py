@@ -4,6 +4,7 @@ from  flask import current_app
 from ourintell.models import RecordedEvent
 from ourintell import db
 from sqlalchemy import exc
+from  ourintell.intell.utils import ticket_handler
 
 import json 
 from hashlib import sha256
@@ -15,7 +16,7 @@ def addEvent():
 
     event = json.dumps(request.get_json())
     hashedEvent = sha256(event.encode('utf-8')).hexdigest()
-    newEventEntry = RecordedEvent(hashedEvent,event)
+    newEventEntry = RecordedEvent(eventId=hashedEvent,eventData=event)
 
     db.session.add(newEventEntry)
 
@@ -28,7 +29,7 @@ def addEvent():
         else:
             return 400
 
-    return hashedEvent, 201
+    return jsonify(ticket_handler(newEventEntry)), 201
 
 @intell.route('/event/<eventId>', methods = ["GET"])
 def getEvent(eventId):
@@ -62,3 +63,7 @@ def getEvents():
         if(skipEvent):
             filteredEvents.append(event)
     return render_template('events.html', events = filteredEvents[pageSize*page: pageSize*page+pageSize], tags = tags, current_page = page)
+
+@intell.route("/test", methods = ["GET"])
+def test():
+    return jsonify(check_network(True))

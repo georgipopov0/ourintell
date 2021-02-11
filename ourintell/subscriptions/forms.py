@@ -6,7 +6,7 @@ class CreateSubscriptionForm(FlaskForm):
     ticketingMethod = SelectField('TicketingMethod',
                            validators=[DataRequired(), Length(min=2, max=20)])
     ticketingAddress = StringField('Address',
-                           validators=[DataRequired(), Length(min=2, max=20)])
+                           validators=[DataRequired(),])
     trackedResourceType = SelectField('ResourceType',
                         validators=[DataRequired(),])
     trackedResource = StringField('TrackResource', validators=[DataRequired()])

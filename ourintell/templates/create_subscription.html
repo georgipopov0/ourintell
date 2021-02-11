@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Create subscription</legend>
+            <div class="form-group">
+                {{ form.ticketingMethod.label(class="form-control-label") }}
+                {% if form.ticketingMethod.errors %}
+                    {{ form.ticketingMethod(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ticketingMethod.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ticketingMethod(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.ticketingAddress.label(class="form-control-label") }}
+                {% if form.ticketingAddress.errors %}
+                    {{ form.ticketingAddress(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ticketingAddress.errors %}
+                            <span>{{    error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ticketingAddress(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.trackedResource.label(class="form-control-label") }}
+                {% if form.trackedResource.errors %}
+                    {{ form.trackedResource(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.trackedResource.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.trackedResource(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.trackedResourceType.label(class="form-control-label") }}
+                {% if form.trackedResourceType.errors %}
+                    {{ form.trackedResourceType(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.trackedResourceType.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.trackedResourceType(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+
+{% endblock content%}
