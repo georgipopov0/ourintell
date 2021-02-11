@@ -31,7 +31,7 @@ def register():
         return redirect(url_for('user.login'))
     return render_template("register.html", form = form)
 
-@user.route("/verify_account/<token>", methods = ["GET", "POST"])
+@user.route("/verify_account/<token>", methods = ["GET"])
 def verify_account(token):
     user = User.verify_token(token)
     if(token == None):
