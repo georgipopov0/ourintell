@@ -44,11 +44,7 @@ type_handlers = {'network':check_network,
 
 def ticket_handler(event):
     subscritions = Subscription.query.all()
-    send_ticket = False
     for subscrition in subscritions:
         send_ticket = type_handlers[subscrition.trackedResourceType](subscrition, event)
         if(send_ticket):
             ticketing_methods[subscrition.ticketingMethod](subscrition, event)
-
-
-    return send_ticket

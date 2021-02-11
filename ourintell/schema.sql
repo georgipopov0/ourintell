@@ -1,23 +1,23 @@
+drop database threat_data;
 create database threat_data;
 use threat_data;
 
-create table RecordedEvents(
+create table recorded_vents(
 	Id varchar(256) primary key not null unique,
-    eventdata varchar(2047)
+    event_data varchar(2047)
 );
 
-create table TicketingMethods(
-	ticketingMethod varchar(16) not null primary key unique,
-    methodDescription varchar(32)  
+create table ticketing_methods(
+	method varchar(16) not null primary key unique
 );
 
-create table TrackableResources(
-	resourceName varchar(16) not null primary key unique
+create table tackable_resource_types(
+	resource_type varchar(16) not null primary key unique
 );
 
 create table Users(
 	Id int primary key not null auto_increment,
-	userName varchar(32) not null unique,
+	username varchar(32) not null unique,
     password char(60) not null,
     email varchar(120),
     is_verified boolean
@@ -27,34 +27,35 @@ create table Users(
 create table subscriptions(
     Id int not null auto_increment unique primary key,
     userId int not null,
-    trackedResource varchar(64) not null,
-    trackedResourceType varchar(16) not null,
-    ticketingMethod varchar(16) not null,
-    ticketingAddress varchar(128) not null,
+    tracked_resource varchar(64) not null,
+    tracked_resource_type varchar(16) not null,
+    ticketing_method varchar(16) not null,
+    ticketing_address varchar(128) not null,
+    is_verified bool not null,
     
     
-    foreign key(trackedResourceType) references TrackableResources(resourceName),
-    foreign key(ticketingMethod) references TicketingMethods(ticketingMethod),
+    foreign key(tracked_resource_type) references tackable_resource_types(resource_type),
+    foreign key(ticketing_method) references ticketing_methods(method),
     foreign key(userId) references Users(id)
 );
 
-create table sentTickets(
-    eventId varchar(256) not null,
-	subscriptionId int not null,
-    
-	foreign key(eventId) references RecordedEvents(eventId),
-    foreign key(subscriptionId) references Subscriptions(Id)
-);
+-- create table sentTickets(
+--     eventId varchar(256) not null,
+-- 	subscriptionId int not null,
+--     
+-- 	foreign key(eventId) references recorded_events(eventId),
+--     foreign key(subscriptionId) references subscriptions(Id)
+-- );
 
-insert into ticketingmethods value('email',null);
-insert into trackableresources value('network');
-insert into ticketingmethods value('discord',null);
-insert into trackableresources value('url');
-insert into subscriptions(userId, trackedResourceType, ticketingMethod, ticketingAddress, trackedResource) value(1, 'network', 'email', 'spas', '0.0.0.0/8');
+insert into ticketing_methods value('email');
+insert into tackable_resource_types value('network');
+insert into ticketing_methods value('discord');
+insert into tackable_resource_types value('url');
+insert into subscriptions(userId, tracked_resource_type, ticketing_method, ticketing_address, tracked_resource) value(1, 'network', 'email', 'spas', '0.0.0.0/8');
 
-drop table sentTickets;
-drop table userSubscriptions;
-drop table Subscriptions;
-drop table Users;
-drop table TicketingMethods;
-drop table TrackableResources;
+-- drop table sentTickets;
+-- drop table usersubscriptions;
+-- drop table subscriptions;
+-- drop table Users;
+-- drop table ticketing_methods;
+-- drop table tackable_resource_types;

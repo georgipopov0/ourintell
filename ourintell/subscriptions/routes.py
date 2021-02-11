@@ -25,6 +25,7 @@ def create_subscription():
 
     form = CreateSubscriptionForm()
     form.ticketingMethod.choices = methods
+    form.ticketingMethod.default = 'email'
     form.trackedResourceType.choices = types
 
     if form.validate_on_submit():

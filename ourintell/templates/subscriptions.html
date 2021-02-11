@@ -3,22 +3,22 @@
 
 
 
-<article class="media content-section justify-content-center " >
+<article class="conteiner content-section justify-content-center " >
   <a   href="{{ url_for('subscriptions.create_subscription') }}">
     Create subscription
 </a>
 </article>
 
 {% for subscription in subscriptions %}
-<article class="media content-section">
-  <div class="media-body">
-    <h2>id: {{ subscription.Id }}</h2>
-    <h2>username: {{ subscription.user.username }}</h2>
-    <h2>type: {{ subscription.trackedResourceType }}</h2>
-    <h2>Tracked: {{ subscription.trackedResource }}</h2>
-    <h2>Method: {{ subscription.ticketingMethod }}</h2>
-    <h2>Address: {{ subscription.ticketingAddress }}</h2>
+<article class="row content-section">
+  <div class = 'col'>
+    <h3><em class="text-muted h3 small">Type:</em> {{ subscription.trackedResourceType }}</h3>
+
+    <h3><em class="text-muted h3 small">Tracking:</em> {{ subscription.trackedResource }}</h3>
   </div>
+  <div class="col d-inline-block text-truncate "  >
+    <h3><em class="text-muted h3 small">Method:</em> {{ subscription.ticketingMethod }}</h3>
+    <h3><em class="text-muted h3 small text-truncate">Address:</em> {{ subscription.ticketingAddress }}</h3>
 </article>
 {% endfor %}
 {% endblock content%}

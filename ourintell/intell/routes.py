@@ -17,7 +17,7 @@ def addEvent():
     event = json.dumps(request.get_json())
     hashedEvent = sha256(event.encode('utf-8')).hexdigest()
     newEventEntry = RecordedEvent(eventId=hashedEvent,eventData=event)
-
+    
     db.session.add(newEventEntry)
 
     try:
@@ -29,7 +29,8 @@ def addEvent():
         else:
             return 400
 
-    return jsonify(ticket_handler(newEventEntry)), 201
+    ticket_handler(newEventEntry)
+    return 'Success',201
 
 @intell.route('/event/<eventId>', methods = ["GET"])
 def getEvent(eventId):
