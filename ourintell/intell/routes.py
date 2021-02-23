@@ -62,17 +62,17 @@ def get_events_as_file():
     filteredEvents_raw = RecordedEvent.get_filtered_events(tags)
     filteredEvents = json.dumps([event['event_data'] for event in filteredEvents_raw])
 
-    proxy = io.StringIO(filteredEvents)
+    string_file = io.StringIO(filteredEvents)
     
     # Creating the byteIO object from the StringIO Object
-    mem = io.BytesIO()
-    mem.write(proxy.getvalue().encode())
+    byte_file = io.BytesIO()
+    byte_file.write(string_file.getvalue().encode())
     # seeking was necessary. Python 3.5.2, Flask 0.12.2
-    mem.seek(0)
-    proxy.close()
+    byte_file.seek(0)
+    string_file.close()
 
     return send_file(
-        mem,
+        byte_file,
         as_attachment=True,
         attachment_filename='data.txt',
         mimetype='text/csv'
