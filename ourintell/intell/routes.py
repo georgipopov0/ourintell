@@ -1,4 +1,8 @@
-from flask import request, Blueprint, jsonify, render_template, url_for
+from flask import send_file,request, Blueprint, jsonify, render_template, url_for
+import requests
+
+import io
+import csv
 
 from  flask import current_app
 from ourintell.models import RecordedEvent
@@ -48,23 +52,37 @@ def get_events():
     page = int(tags.pop('page', 1)) - 1
     if page < 0:
         page = 0
-    eventsString = RecordedEvent.query.all()
-    events = [i.asDict() for i in eventsString]
-    filteredEvents = []
-    for event in events:
-        skipEvent = True 
-        for tag in tags:
-            if tag == 'page':
-                continue
-            if tags[tag] == "exists" and tag in event['event_data']:
-                continue
-            if event['event_data'].get(tag) != tags[tag]:
-                skipEvent = False
-                break
-        if(skipEvent):
-            filteredEvents.append(event)
+    filteredEvents = RecordedEvent.get_filtered_events(tags)
     return render_template('events.html', events = filteredEvents[pageSize*page: pageSize*page+pageSize], tags = tags, current_page = page)
+
+@intell.route("/download/events", methods = ["GET"])
+def get_events_as_file():
+    tags =  request.args.copy()
+    tags.pop('page')
+    filteredEvents_raw = RecordedEvent.get_filtered_events(tags)
+    filteredEvents = json.dumps([event['event_data'] for event in filteredEvents_raw])
+
+    proxy = io.StringIO(filteredEvents)
+    
+    # Creating the byteIO object from the StringIO Object
+    mem = io.BytesIO()
+    mem.write(proxy.getvalue().encode())
+    # seeking was necessary. Python 3.5.2, Flask 0.12.2
+    mem.seek(0)
+    proxy.close()
+
+    return send_file(
+        mem,
+        as_attachment=True,
+        attachment_filename='data.txt',
+        mimetype='text/csv'
+    )
 
 @intell.route("/test", methods = ["GET"])
 def test():
-    return jsonify(check_network(True))
+    return 'true'
+
+@intell.route('/test_send', methods = ['GET'])
+def test_send():
+    test = requests.get('http://127.0.0.1:5000/test')
+    return jsonify(test.text)

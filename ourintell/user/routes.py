@@ -31,7 +31,7 @@ def register():
         return redirect(url_for('user.login'))
     return render_template("register.html", form = form)
 
-@user.route("/verify_account/<token>", methods = ["GET", "POST"])
+@user.route("/verify_account/<token>", methods = ["GET"])
 def verify_account(token):
     user = User.verify_token(token)
     if(token == None):
@@ -49,7 +49,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        print(user)
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')

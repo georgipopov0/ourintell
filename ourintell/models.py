@@ -49,6 +49,23 @@ class RecordedEvent(db.Model):
     def asDict(self):
         return{'id':self.id, 'event_data':json.loads( self.event_data)}
 
+    @staticmethod
+    def get_filtered_events(tags):
+        events_string = RecordedEvent.query.all()
+        events = [i.asDict() for i in events_string]
+        filteredEvents = []
+        for event in events:
+            skipEvent = True 
+            for tag in tags:
+                if tags[tag] == "exists" and tag in event['event_data']:
+                    continue
+                if event['event_data'].get(tag) != tags[tag]:
+                    skipEvent = False
+                    break
+            if(skipEvent):
+                filteredEvents.append(event)
+        return filteredEvents
+
 class TicketingMethod(db.Model):
     __tablename__ = 'ticketing_methods'
     method = db.Column(db.String(16), primary_key=True,)
@@ -62,13 +79,26 @@ class TrackableResourceType(db.Model):
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
-    Id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     is_verified = db.Column(db.Boolean, nullable=False)
     tracked_resource = db.Column(db.String, nullable=False)
     tracked_resource_type = db.Column(db.String(16), db.ForeignKey('trackable_resource_types.resource_type'), nullable=False)
     ticketing_method = db.Column(db.String(16), db.ForeignKey('ticketing_methods.method'), nullable=False)
     ticketing_address = db.Column(db.String(128), nullable=False)
+
+    def get_verification_token(self, expires_sec=1800):
+        serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)
+        return serializer.dumps({'subscription_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_token(token):
+        serializer = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            subscription_id = serializer.loads(token)['subscription_id']
+        except:
+            return None
+        return Subscription.query.get(subscription_id)
 
 # class UserSubscriptions(db.Model):
 #     userId = db.Column(db.Integer, nullable=False)
