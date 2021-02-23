@@ -45,7 +45,7 @@ type_handlers = {'network':check_network,
 def ticket_handler(event):
     subscritions = Subscription.query.all()
     for subscrition in subscritions:
-        if(subscrition.is_verified == False):
+        if(subscrition.is_verified is False):
             continue
         send_ticket = type_handlers[subscrition.tracked_resource_type](subscrition, event)
         if(send_ticket):

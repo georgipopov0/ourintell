@@ -49,6 +49,23 @@ class RecordedEvent(db.Model):
     def asDict(self):
         return{'id':self.id, 'event_data':json.loads( self.event_data)}
 
+    @staticmethod
+    def get_filtered_events(tags):
+        events_string = RecordedEvent.query.all()
+        events = [i.asDict() for i in events_string]
+        filteredEvents = []
+        for event in events:
+            skipEvent = True 
+            for tag in tags:
+                if tags[tag] == "exists" and tag in event['event_data']:
+                    continue
+                if event['event_data'].get(tag) != tags[tag]:
+                    skipEvent = False
+                    break
+            if(skipEvent):
+                filteredEvents.append(event)
+        return filteredEvents
+
 class TicketingMethod(db.Model):
     __tablename__ = 'ticketing_methods'
     method = db.Column(db.String(16), primary_key=True,)

@@ -48,12 +48,12 @@ create table subscriptions(
 -- );
 
 insert into ticketing_methods value('email');
-insert into tackable_resource_types value('network');
+insert into trackable_resource_types value('network');
 insert into ticketing_methods value('discord');
-insert into tackable_resource_types value('url');
+insert into trackable_resource_types value('url');
 insert into subscriptions(userId, tracked_resource_type, ticketing_method, ticketing_address, tracked_resource, is_verified) value(1, 'network', 'email', 'spas', '0.0.0.0/8', false);
 
-drop table recorded_vents;
+drop table recorded_events;
 drop table sentTickets;
 drop table usersubscriptions;
 drop table subscriptions;
