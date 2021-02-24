@@ -13,7 +13,10 @@ def send_verification_email(subscription):
 {url_for('subscriptions.verify_subscription', token=token, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
-    mail.send(message)
+    try:
+        mail.send(message)
+    except:
+        pass
 
 
     def send_verification_discord_message(subscription):

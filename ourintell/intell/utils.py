@@ -17,7 +17,10 @@ def send_email(subscrition, event):
 {url_for('intell.get_event', eventId = event.id, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
-    mail.send(message)
+    try:
+        mail.send(message)
+    except:
+        pass
 
 def send_discord_message(subscription, event):
     pass

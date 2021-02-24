@@ -13,8 +13,10 @@ def send_reset_email(user):
 {url_for('user.reset_password', token=token, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
-    mail.send(message)
-
+    try:
+        mail.send(message)
+    except:
+        pass
 
 def send_accaunt_verification_email(user):
     token = user.get_verification_token()
@@ -26,4 +28,7 @@ def send_accaunt_verification_email(user):
 {url_for('user.verify_account', token=token, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
-    mail.send(message)
+    try:
+        mail.send(message)
+    except:
+        pass
