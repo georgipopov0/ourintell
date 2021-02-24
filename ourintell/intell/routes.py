@@ -58,9 +58,35 @@ def get_events():
 @intell.route("/download/events", methods = ["GET"])
 def get_events_as_file():
     tags =  request.args.copy()
-    tags.pop('page')
+    if 'page' in tags:
+        tags.pop('page')
     filteredEvents_raw = RecordedEvent.get_filtered_events(tags)
     filteredEvents = json.dumps([event['event_data'] for event in filteredEvents_raw])
+
+    string_file = io.StringIO(filteredEvents)
+    
+    # Creating the byteIO object from the StringIO Object
+    byte_file = io.BytesIO()
+    byte_file.write(string_file.getvalue().encode())
+    # seeking was necessary. Python 3.5.2, Flask 0.12.2
+    byte_file.seek(0)
+    string_file.close()
+
+    return send_file(
+        byte_file,
+        as_attachment=True,
+        attachment_filename='data.txt',
+        mimetype='text/csv'
+    )
+
+@intell.route("/download/ip/events", methods = ["GET"])
+def get_events_ip_as_file():
+    tags =  request.args.copy()
+    if 'page' in tags:
+        tags.pop('page')
+    filteredEvents_raw = RecordedEvent.get_filtered_events(tags)
+    filteredEvents_ips = [event['event_data']['source.ip'] for event in filteredEvents_raw if 'source.ip' in event['event_data']]
+    filteredEvents = json.dumps(filteredEvents_ips)
 
     string_file = io.StringIO(filteredEvents)
     
