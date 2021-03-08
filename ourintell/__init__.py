@@ -8,12 +8,13 @@ from flask_mail import Mail
 
 from ourintell.config import Config
 
+# Initialise utils
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 mail = Mail()
 
-
+# Create and instance for the app
 def create_app(test_config=None,config_class=Config):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -32,22 +33,19 @@ def create_app(test_config=None,config_class=Config):
     except OSError:
         pass
 
-    # initialise the database
+    # Pass the app to the utils
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
 
-    # @app.teardown_appcontext
-    # def shutdown_session(exception=None):
-    #     db_session.remove()
-    
-    # a simple page that says hello
 
+    # Import blueprints
     from ourintell.intell.routes import intell
     from ourintell.user.routes import user
     from ourintell.subscriptions.routes import subscriptions
 
+    # Registerer the blue prints
     app.register_blueprint(intell)
     app.register_blueprint(user)
     app.register_blueprint(subscriptions)

@@ -7,6 +7,7 @@ from ourintell import mail
 
 from ourintell.models import Subscription
 
+# Send email for subscription match subscription
 def send_email(subscrition, event):
     user = subscrition.user
     message = Message('Ourintell Subscription update',
@@ -20,15 +21,16 @@ If you did not make this request then simply ignore this email and no changes wi
     try:
         mail.send(message)
     except:
-        pass
+        print(' not sent')
 
 def send_discord_message(subscription, event):
     pass
 
-
+# Dict relating the ticketing method to the tiketing functions
 ticketing_methods = {'email': send_email,
                     'discord': send_discord_message}
 
+# Check if an ip is in the given network
 def check_network(subscrition, event):
     event = event.asDict()
     try:
@@ -37,14 +39,18 @@ def check_network(subscrition, event):
         return False 
     return is_in_network
 
-
+# Check for a domain match
 def check_url(subscrition, event):
     return False
 
+
+# Dict relating the tracked resource 
+# to check function for the method
 type_handlers = {'network':check_network,
                 'url':check_url}
 
-
+# Loop trough all subscriptions and send a mesage 
+# if an event matches the subscription parameters
 def ticket_handler(event):
     subscritions = Subscription.query.all()
     for subscrition in subscritions:

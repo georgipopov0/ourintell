@@ -9,6 +9,7 @@ from ourintell.subscriptions.utils import send_verification_email
 
 subscriptions = Blueprint('subscriptions', __name__)
 
+
 @subscriptions.route("/subscriptions", methods = ["GET","POST"])
 @login_required
 def get_subscriptions():
@@ -16,18 +17,20 @@ def get_subscriptions():
     return render_template("subscriptions.html", title='Subscriptions', subscriptions=subscriptions)
 
 
-
 @subscriptions.route("/create_subscription", methods = ["GET","POST"])
 @login_required
 def create_subscription():
 
+    # Get all available ticketing methods and resource types
     methods = [method.method  for method in TicketingMethod.query.all()]
     types = [resource.resource_type for resource in TrackableResourceType.query.all()]
 
+    # Generate the form
     form = CreateSubscriptionForm()
     form.ticketing_method.choices = methods
     form.tracked_resource_type.choices = types
 
+    # Create a db entry with the new subscription
     if form.validate_on_submit():
         user = current_user
         subscription = Subscription(userId = current_user.id,

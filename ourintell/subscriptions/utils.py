@@ -16,14 +16,17 @@ If you did not make this request then simply ignore this email and no changes wi
     try:
         mail.send(message)
     except:
-        pass
+        print('not sent')
 
 
     def send_verification_discord_message(subscription):
         pass
 
+    # This dict contains the relationship between the methods
+    #  and the functions for their verification
     ticketing_methods = {'email': send_verification_email,
                         'discord': send_verification_discord_message}
 
+    # Send a verification for the selected method
     def send_verification_token(subscription):
         ticketing_methods[subscription.thicketing_method](subscription)

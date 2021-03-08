@@ -15,6 +15,7 @@ from hashlib import sha256
 
 intell = Blueprint('intell',__name__)
 
+# This route is used for adding new events
 @intell.route("/events", methods = ["POST"])
 def add_event():
 
@@ -33,8 +34,9 @@ def add_event():
         else:
             return 400
 
+    # Check for subscriptions maching this event
     ticket_handler(newEventEntry)
-    return 'Success',201
+    return 'Success', 201
 
 @intell.route('/event/<eventId>', methods = ["GET"])
 def get_event(eventId):
@@ -48,7 +50,11 @@ def get_event(eventId):
 @intell.route("/events", methods = ["GET"])
 def get_events():
     pageSize = 11
+
+    # Create a mutable dict containing the tags
     tags =  request.args.copy()
+
+    # Pop the page argument
     page = int(tags.pop('page', 1)) - 1
     if page < 0:
         page = 0
@@ -65,13 +71,14 @@ def get_events_as_file():
 
     string_file = io.StringIO(filteredEvents)
     
-    # Creating the byteIO object from the StringIO Object
+    # Creating a bite object
     byte_file = io.BytesIO()
     byte_file.write(string_file.getvalue().encode())
-    # seeking was necessary. Python 3.5.2, Flask 0.12.2
+    # Put the file pointer at 0
     byte_file.seek(0)
     string_file.close()
 
+    # Return the created file
     return send_file(
         byte_file,
         as_attachment=True,
@@ -90,13 +97,14 @@ def get_events_ip_as_file():
 
     string_file = io.StringIO(filteredEvents)
     
-    # Creating the byteIO object from the StringIO Object
+    # Creating a bite object
     byte_file = io.BytesIO()
     byte_file.write(string_file.getvalue().encode())
-    # seeking was necessary. Python 3.5.2, Flask 0.12.2
+    # Puts the file pointer at 0
     byte_file.seek(0)
     string_file.close()
 
+    # Return the created file
     return send_file(
         byte_file,
         as_attachment=True,

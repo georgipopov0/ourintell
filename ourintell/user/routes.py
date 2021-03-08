@@ -49,6 +49,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+
+        # Check user credentials
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
@@ -84,8 +86,9 @@ def reset_password(token):
     if(not user):
         flash('That is an invalid or expired token', 'warning')
         return redirect(url_for('reset_request'))
-    form = ResetPasswordForm()\
+    form = ResetPasswordForm()
 
+    # Set new user password
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashed_password

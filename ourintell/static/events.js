@@ -1,10 +1,10 @@
 $(document).ready(function(){
     var url = window.location.href
+
+    // Creates a string containing only the url arguments
     var args = url.split('/events')[1]
-    var download_url = '/download/events'+ 
-                args
-    $("#download-btn").attr('href',download_url)
-    var download_ips_url = '/download/ip/events'+ 
-                args
-    $("#download-ip-btn").attr('href',download_ips_url)
+
+    $("#download-btn").attr('href','/download/events' + args)
+    $("#download-ip-btn").attr('href','/download/ip/events' + args)
 })
+

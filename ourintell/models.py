@@ -24,10 +24,12 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
 
+    # Generate a verification token for the user
     def get_verification_token(self, expires_sec=1800):
         serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         return serializer.dumps({'user_id': self.id}).decode('utf-8')
 
+    # Get a user from a verification token
     @staticmethod
     def verify_token(token):
         serializer = Serializer(current_app.config['SECRET_KEY'])
@@ -49,33 +51,37 @@ class RecordedEvent(db.Model):
     def asDict(self):
         return{'id':self.id, 'event_data':json.loads( self.event_data)}
 
+    # Filter all events by tag
     @staticmethod
     def get_filtered_events(tags):
         events_string = RecordedEvent.query.all()
+        # convert all events to dicts
         events = [i.asDict() for i in events_string]
         filteredEvents = []
         for event in events:
-            skipEvent = True 
+            skipedEvent = False
             for tag in tags:
+                # Check if an event has a given key  
                 if tags[tag] == "exists" and tag in event['event_data']:
                     continue
+                # Check if the event matches all tags and skis it on a missmach
                 if event['event_data'].get(tag) != tags[tag]:
-                    skipEvent = False
+                    skipedEvent = True
                     break
-            if(skipEvent):
+
+            # Check if the event has been skipped
+            if(not skipedEvent):
                 filteredEvents.append(event)
         return filteredEvents
 
 class TicketingMethod(db.Model):
     __tablename__ = 'ticketing_methods'
     method = db.Column(db.String(16), primary_key=True,)
-    # subscriptions = db.relationship('Subscription', backref = 'method', lazy=True)
     
 
 class TrackableResourceType(db.Model):
     __tablename__ = 'trackable_resource_types'
     resource_type = db.Column(db.String(16), primary_key=True, unique=True)
-    # subscriptions = db.relationship('Subscription', backref = 'resource', lazy=True)
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
@@ -87,10 +93,12 @@ class Subscription(db.Model):
     ticketing_method = db.Column(db.String(16), db.ForeignKey('ticketing_methods.method'), nullable=False)
     ticketing_address = db.Column(db.String(128), nullable=False)
 
+    # Generate a verification token
     def get_verification_token(self, expires_sec=1800):
         serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         return serializer.dumps({'subscription_id': self.id}).decode('utf-8')
 
+    # Retrun a subscription from verification token
     @staticmethod
     def verify_token(token):
         serializer = Serializer(current_app.config['SECRET_KEY'])
@@ -99,11 +107,3 @@ class Subscription(db.Model):
         except:
             return None
         return Subscription.query.get(subscription_id)
-
-# class UserSubscriptions(db.Model):
-#     userId = db.Column(db.Integer, nullable=False)
-#     subscriptionId = db.Column(db.Integer, nullable=False)
-
-# class sentEvents(db.model):
-#     eventId = db.Column(db.String(256), nullable=False)
-#     subscriptionId = db.Column(db.Integer, nullable=False)

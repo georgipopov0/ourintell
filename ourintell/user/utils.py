@@ -3,6 +3,7 @@ from flask_mail import Message
 
 from ourintell import mail
 
+# Send a reset password email for  to the user
 def send_reset_email(user):
     token = user.get_verification_token()
     message = Message('Password Reset Request',
@@ -16,8 +17,9 @@ If you did not make this request then simply ignore this email and no changes wi
     try:
         mail.send(message)
     except:
-        pass
+        print(' not sent')
 
+# Send a account verification email for  to the user
 def send_accaunt_verification_email(user):
     token = user.get_verification_token()
     message = Message('Verify Account',
@@ -31,4 +33,4 @@ If you did not make this request then simply ignore this email and no changes wi
     try:
         mail.send(message)
     except:
-        pass
+        print(' not sent')
