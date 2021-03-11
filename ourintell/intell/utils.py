@@ -26,22 +26,32 @@ If you did not make this request then simply ignore this email and no changes wi
 def send_discord_message(subscription, event):
     pass
 
+def send_api_message():
+    pass
+
+
 # Dict relating the ticketing method to the tiketing functions
 ticketing_methods = {'email': send_email,
-                    'discord': send_discord_message}
+                    'discord': send_discord_message,
+                    "API": send_api_message
+                    }
 
 # Check if an ip is in the given network
 def check_network(subscrition, event):
     event = event.asDict()
+    ip_string = event['event_data'].get('source.ip')
+    if(not ip_string):
+        return False
     try:
-        is_in_network = (IPAddress(event['event_data'].get('source.ip')) in IPNetwork(subscrition.tracked_resource))
+        ip = IPAddress(ip_string)
     except AddrFormatError:
         return False 
+    is_in_network = ( ip in IPNetwork(subscrition.tracked_resource))
     return is_in_network
 
 # Check for a domain match
 def check_url(subscrition, event):
-    return False
+    return event.get("source.fqdn") == event.get(source.fqdn) 
 
 
 # Dict relating the tracked resource 
@@ -56,6 +66,8 @@ def ticket_handler(event):
     for subscrition in subscritions:
         if(subscrition.is_verified is False):
             continue
-        send_ticket = type_handlers[subscrition.tracked_resource_type](subscrition, event)
-        if(send_ticket):
-            ticketing_methods[subscrition.method](subscrition, event)
+        # Call the appropriate function from type_handlers to check for matching event 
+        match_found = type_handlers[subscrition.tracked_resource_type](subscrition, event)
+        if(match_found):
+            # Send a message with the appropriate media
+            ticketing_methods[subscrition.ticketing_method](subscrition, event)

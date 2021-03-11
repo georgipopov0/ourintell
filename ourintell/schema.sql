@@ -1,4 +1,4 @@
--- drop database threat_data;
+drop database threat_data;
 create database threat_data;
 use threat_data;
 
@@ -41,8 +41,9 @@ create table subscriptions(
 
 insert into users(username, password, email, is_verified) value('admin','admin','admin',1);
 insert into ticketing_methods value('email');
-insert into trackable_resource_types value('network');
 insert into ticketing_methods value('discord');
+insert into ticketing_methods value('API');
+insert into trackable_resource_types value('network');
 insert into trackable_resource_types value('url');
 insert into subscriptions(userId, tracked_resource_type, ticketing_method, ticketing_address, tracked_resource, is_verified) value(1, 'network', 'email', 'spas', '0.0.0.0/8', false);
 

@@ -32,7 +32,7 @@ def add_event():
         if(error_code == 1062):
             return "value already exists", 409
         else:
-            return 400
+            return 250
 
     # Check for subscriptions maching this event
     ticket_handler(newEventEntry)
