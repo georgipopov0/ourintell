@@ -44,10 +44,12 @@ def create_app(test_config=None,config_class=Config):
     from ourintell.intell.routes import intell
     from ourintell.user.routes import user
     from ourintell.subscriptions.routes import subscriptions
+    from ourintell.tickets.routes import tickets
 
     # Registerer the blue prints
     app.register_blueprint(intell)
     app.register_blueprint(user)
     app.register_blueprint(subscriptions)
+    app.register_blueprint(tickets)
 
     return app

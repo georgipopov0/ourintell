@@ -1,11 +1,13 @@
 from netaddr import IPAddress, IPNetwork, AddrFormatError
 
+from ourintell import db
+
 from flask import url_for
 from flask_mail import Message
 
 from ourintell import mail
 
-from ourintell.models import Subscription
+from ourintell.models import Subscription, Sent_ticket
 
 # Send email for subscription match subscription
 def send_email(subscrition, event):
@@ -71,3 +73,6 @@ def ticket_handler(event):
         if(match_found):
             # Send a message with the appropriate media
             ticketing_methods[subscrition.ticketing_method](subscrition, event)
+            new_ticket = Sent_ticket(subscriptionId = subscrition.id, eventId = event.id)
+            db.session.add(new_ticket)
+            db.session.commit()

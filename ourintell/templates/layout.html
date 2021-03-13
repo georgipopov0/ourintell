@@ -26,10 +26,10 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="/">Home</a>
               <a class="nav-item nav-link" href="{{url_for('intell.get_events')}}">Events</a>
               {% if current_user.is_authenticated %}
               <a class="nav-item nav-link" href="{{url_for('subscriptions.get_subscriptions')}}">Subscriptions</a>
+              <a class="nav-item nav-link" href="{{ url_for('tickets.get_tickets') }}">Notifications</a>
               {% endif %}
             </div>
             <!-- Navbar Right Side -->

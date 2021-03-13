@@ -93,6 +93,8 @@ class Subscription(db.Model):
     ticketing_method = db.Column(db.String(16), db.ForeignKey('ticketing_methods.method'), nullable=False)
     ticketing_address = db.Column(db.String(128), nullable=False)
 
+    sent_tickets = db.relationship('Sent_ticket', backref = 'subscription', lazy=True)
+
     # Generate a verification token
     def get_verification_token(self, expires_sec=1800):
         serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -107,3 +109,10 @@ class Subscription(db.Model):
         except:
             return None
         return Subscription.query.get(subscription_id)
+
+
+class Sent_ticket(db.Model):
+    __tablename__ = 'sent_tickets'
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    subscriptionId = db.Column(db.Integer, db.ForeignKey('subscriptions.id'), nullable=False)
+    eventId = db.Column(db.String, db.ForeignKey('recorded_events.id'),nullable=False)

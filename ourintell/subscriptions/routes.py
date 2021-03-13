@@ -13,8 +13,8 @@ subscriptions = Blueprint('subscriptions', __name__)
 @subscriptions.route("/subscriptions", methods = ["GET","POST"])
 @login_required
 def get_subscriptions():
-    subscriptions = Subscription.query.all()
-    return render_template("subscriptions.html", title='Subscriptions', subscriptions=subscriptions)
+    user_subscriptions = current_user.subscriptions
+    return render_template("subscriptions.html", title='Subscriptions', subscriptions=user_subscriptions)
 
 
 @subscriptions.route("/create_subscription", methods = ["GET","POST"])
