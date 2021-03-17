@@ -32,6 +32,21 @@
       </article>
   {% endfor %}
 
+  {% for result in scan_results %}
+  <article class="media content-section">
+    <div class="media-body">
+      {% if event['event_data']["source.ip"] %}
+      <h2><a class="event-ip" href="{{ url_for('intell.get_event', eventId = event['id']) }}">{{ event['event_data']['source.ip'] }}</a></h2>
+      {% elif event['event_data']["source.network"] %}
+      <h2><a class="event-ip" href="{{ url_for('intell.get_event', eventId = event['id']) }}">{{ event['event_data']['source.network'] }}</a></h2>
+      {%else%}
+      <h2><a class="event-ip" href="{{ url_for('intell.get_event', eventId = event['id']) }}"> {{ event['event_data']['source.fqdn'] }} </a></h2>
+      {% endif %}
+      <p class="article-content">{{ event['event_data']["feed.provider"] }}</p>
+    </div>
+  </article>
+{% endfor %}
+
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
       <li class="page-item">

@@ -44,6 +44,7 @@ class RecordedEvent(db.Model):
     __tablename__ = 'recorded_events'
     id = db.Column(db.String(256), primary_key=True)
     event_data = db.Column(db.String(2047), nullable=False)
+    scans = db.relationship('ScanResult', backref = 'user', lazy=True)
 
     def get_event(self):
         return self.event_data
@@ -52,6 +53,7 @@ class RecordedEvent(db.Model):
         return{'id':self.id, 'event_data':json.loads( self.event_data)}
 
     # Filter all events by tag
+    # tags is a dict containing filed names and their values
     @staticmethod
     def get_filtered_events(tags):
         events_string = RecordedEvent.query.all()
@@ -93,7 +95,7 @@ class Subscription(db.Model):
     ticketing_method = db.Column(db.String(16), db.ForeignKey('ticketing_methods.method'), nullable=False)
     ticketing_address = db.Column(db.String(128), nullable=False)
 
-    sent_tickets = db.relationship('Sent_ticket', backref = 'subscription', lazy=True)
+    sent_tickets = db.relationship('SentTicket', backref = 'subscription', lazy=True)
 
     # Generate a verification token
     def get_verification_token(self, expires_sec=1800):
@@ -111,8 +113,15 @@ class Subscription(db.Model):
         return Subscription.query.get(subscription_id)
 
 
-class Sent_ticket(db.Model):
+
+class SentTicket(db.Model):
     __tablename__ = 'sent_tickets'
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     subscriptionId = db.Column(db.Integer, db.ForeignKey('subscriptions.id'), nullable=False)
     eventId = db.Column(db.String, db.ForeignKey('recorded_events.id'),nullable=False)
+
+class ScanResult(db.Model):
+    __tablename__ = 'scan_resultes'
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    eventId = db.Column(db.String, db.ForeignKey('recorded_events.id'),nullable=False)
+    scan_data = db.Column(db.String(8192), nullable=False)

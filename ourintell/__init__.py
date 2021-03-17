@@ -40,6 +40,7 @@ def create_app(test_config=None,config_class=Config):
     mail.init_app(app)
 
 
+
     # Import blueprints
     from ourintell.intell.routes import intell
     from ourintell.user.routes import user

@@ -1,4 +1,4 @@
-drop database threat_data;
+-- drop database threat_data;
 create database threat_data;
 use threat_data;
 
@@ -47,6 +47,13 @@ create table sent_tickets(
     foreign key(subscriptionId) references subscriptions(Id),
     foreign key(eventId) references Recorded_Events(id)
 );
+create table scan_resultes(
+	id int primary key auto_increment,
+    eventid varchar(256) not null,
+    scan_data varchar(8192),
+    
+    foreign key(userId) references users(id)
+)
 
 insert into users(username, password, email, is_verified) value('admin','admin','admin',1);
 insert into ticketing_methods value('email');
@@ -56,6 +63,7 @@ insert into trackable_resource_types value('network');
 insert into trackable_resource_types value('url');
 insert into subscriptions(userId, tracked_resource_type, ticketing_method, ticketing_address, tracked_resource, is_verified) value(1, 'network', 'email', 'spas', '0.0.0.0/8', false);
 insert into sent_tickets(subscriptionId, eventId) value(3,"0049f82fbc3c6505d64b1d897d3705c54f5d0d602b49b16c8c0fa5812ce85c6b");
+
 
 -- drop table recorded_events;
 -- drop table sentTickets;

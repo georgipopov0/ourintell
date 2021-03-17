@@ -1,3 +1,4 @@
+from ourintell.scaners import scan
 from flask import send_file,request, Blueprint, jsonify, render_template, url_for
 import requests
 
@@ -5,7 +6,7 @@ import io
 import csv
 
 from  flask import current_app
-from ourintell.models import RecordedEvent
+from ourintell.models import RecordedEvent, ScanResult
 from ourintell import db
 from sqlalchemy import exc
 from  ourintell.intell.utils import ticket_handler
@@ -30,9 +31,13 @@ def add_event():
     except exc.IntegrityError as error:
         error_code = error.orig.args[0]
         if(error_code == 1062):
-            return "value already exists", 409
+            return "value already exists", 250
         else:
-            return 250
+            return 400
+
+    pass
+
+    scan(newEventEntry)
 
     # Check for subscriptions maching this event
     ticket_handler(newEventEntry)
@@ -42,8 +47,10 @@ def add_event():
 def get_event(eventId):
 
     event = RecordedEvent.query.filter_by(id = eventId).first()
-    event = json.loads(event.event_data)
-    return render_template("event.html",event = event)
+    scan_result = [json.loads(scan.scan_data) for scan in event.scans]
+    test = scan_result[0]["nmap"]["scaninfo"]
+    event_dict = json.loads(event.event_data)
+    return render_template("event.html",event = event_dict, scan_results = scan_result)
 
 
 @intell.route("/", methods = ["GET"])

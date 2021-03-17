@@ -15,7 +15,12 @@
         <div class="alert alert-danger">
             Not is_verified.
         </div>
+      {% else %}
+        <div class="justify-content-center d-flex align-items-center">
+          <h3><em class="text-muted h3 small">Id:</em> {{ subscription.id }}</h3>
+        </div>
       {% endif %}
+
       <div class = 'col'>
         <h3><em class="text-muted h3 small">Type:</em> {{ subscription.tracked_resource_type }}</h3>
 
