@@ -29,7 +29,7 @@ def add_event():
     try:
         db.session.commit()
     except exc.IntegrityError as error:
-        error_code = error.orig.args[0]
+        error_code = error.orig.args
         if(error_code == 1062):
             return "value already exists", 250
         else:
@@ -37,6 +37,7 @@ def add_event():
 
     pass
 
+    # Runs all available scans on the event
     scan(newEventEntry)
 
     # Check for subscriptions maching this event
@@ -48,7 +49,6 @@ def get_event(eventId):
 
     event = RecordedEvent.query.filter_by(id = eventId).first()
     scan_result = [json.loads(scan.scan_data) for scan in event.scans]
-    test = scan_result[0]["nmap"]["scaninfo"]
     event_dict = json.loads(event.event_data)
     return render_template("event.html",event = event_dict, scan_results = scan_result)
 

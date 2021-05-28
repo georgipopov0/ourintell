@@ -15,8 +15,6 @@ def scan(event):
 
     if  "source.ip" in event_dict['event_data']:
         address = event_dict['event_data']["source.ip"]
-    elif "source.network" in event['event_data']:
-        address = event_dict['event_data']["source.network"]
     else:
         address = event_dict['event_data']["source.fqdn"]
 
