@@ -1,10 +1,23 @@
 $(document).ready(function(){
-    var url = window.location.href
+    $("#search_box").on('keypress', function (e) {
+        if(e.which === 13){ 
 
-    // Creates a string containing only the url arguments
-    var args = url.split('/events')[1]
+            value = $(this).val();
+            value = value.replace(/\s+/g, '');
+            tags = value.split(",")
+            console.log(tags)
+            for(tag in tags){
+                // Add the url arguments for the search
+                if(document.location.href.indexOf('?') > -1) {
+                    var url = document.location.href+tags[tag];
+                }else{
+                    var url = document.location.href+tags[tag];
+                }
+            }
+            document.location = url;
 
-    $("#download-btn").attr('href','/download/events' + args)
-    $("#download-ip-btn").attr('href','/download/ip/events' + args)
-})
+
+        }
+    });
+});
 

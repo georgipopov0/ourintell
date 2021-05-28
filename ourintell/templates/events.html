@@ -5,7 +5,7 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1">tags:</span>
   </div>
-  <input type="text" class="form-control" placeholder="tag1,tag2,tag3" aria-label="tags" aria-describedby="basic-addon1">
+  <input type="text" id="search_box" class="form-control" placeholder="tag1,tag2,tag3" aria-label="tags" aria-describedby="basic-addon1">
 </div>
 
 
@@ -32,8 +32,13 @@
       </article>
   {% endfor %}
 
+
+  {% set last,first = "last","first" %}
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('intell.get_events', page=first,**tags)}}" tabindex="-1">&lt>&lt</a>
+      </li>
       <li class="page-item">
         <a class="page-link" href="{{ url_for('intell.get_events', page=current_page ,**tags)}}" tabindex="-1">&lt</a>
       </li>
@@ -41,8 +46,12 @@
       <li class="page-item"><a class="page-link" href="#">{{current_page + 1}}</a></li>
 
 
+      
       <li class="page-item">
         <a class="page-link" href="{{ url_for('intell.get_events', page= current_page + 2,**tags)}}">&gt</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('intell.get_events', page='last',**tags)}}">&gt&gt</a>
       </li>
     </ul>
   </nav>
