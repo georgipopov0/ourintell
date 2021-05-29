@@ -55,10 +55,19 @@ def get_events():
     tags =  request.args.copy()
 
     # Pop the page argument
-    page = int(tags.pop('page', 1)) - 1
+    page_string = tags.pop('page', 1)
+
+    filteredEvents = RecordedEvent.get_filtered_events(tags)
+
+    if(page_string == 'last'):
+        page_string = len(filteredEvents)//pageSize
+    if(page_string == 'first' ):
+        page_string = 0
+    
+    page = int(page_string) - 1
     if page < 0:
         page = 0
-    filteredEvents = RecordedEvent.get_filtered_events(tags)
+
     return render_template('events.html', events = filteredEvents[pageSize*page: pageSize*page+pageSize], tags = tags, current_page = page)
 
 @intell.route("/download/events", methods = ["GET"])
